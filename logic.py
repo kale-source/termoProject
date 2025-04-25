@@ -1,47 +1,85 @@
 def gameLogic(randomWord, wordTyped):
-    win = 0
-    letters_check = []
+    dictLetter = {'0': '', '1': '', '2': '', '3': '', '4': ''}
+
+    def addDict(index, color):
+        if index == 0:
+            dictLetter['0'] = color
+        elif index == 1:
+            dictLetter['1'] = color
+        elif index == 2:
+            dictLetter['2'] = color
+        elif index == 3:
+            dictLetter['3'] = color
+        elif index == 4:
+            dictLetter['4'] = color
+
+    def lettersCounter(letterTyped):
+        letters_quantity = 0
+        
+        for letters in randomWord:
+            if letters == letterTyped: letters_quantity += 1
+        
+        return letters_quantity
     
-    # Faz a contagem da letra existente no randomWord
-    def checkLetters(typedLetter):
-        countTotal = 0
-        for countRandom in randomWord:
-            if countRandom == typedLetter: countTotal += 1
-        if typedLetter not in letters_check:
-            letters_check.append(typedLetter)
-            return True
-        else:
-            check_quantity = 0
-            for check in letters_check:
-                if check == typedLetter: check_quantity += 1
-            if check_quantity < countTotal:
-                letters_check.append(typedLetter)
+    letters_check = list()
+    indexList = []
+
+    def green_check(index, letter):
+        # Identifica os verdes
+        for indexRandom, letterRandom in enumerate(randomWord):
+            if indexRandom == index and letterRandom == letter:
+                addDict(index, 'green')
+                indexList.append(index)
+                letters_check.append(letter)
                 return True
-            else:
-                return False
+            
+        return False
+    
+    def yellow_check(index, letter):
+        # Identifica os amarelos depois dos verdes
+        quantity_total = lettersCounter(letter)
+        quantity_check = 0
+        indexStr = ''
 
-    # Função para comparar a palavra digitada pelo usuário com a palavra sorteada e a posição
-    def checkPosition(indexTyped, letterTyped):
-        for indexRandom, randomTyped in enumerate(randomWord):
-            if letterTyped == randomTyped and indexRandom == indexTyped:
-                return True # Tem a letra e está na posição correta e retorna true
-        return False # Retorna False ou seja, tem na palavra, mas está na posição errada
+        for i in indexList: indexStr += str(i)
 
-    # For para palavra digitada pelo usuário
-    for index, typed in enumerate(wordTyped):
-        if typed in randomWord:
-            checkResult = checkLetters(typed)
-            result = checkPosition(index, typed)
-            if checkResult == True:
-                if result == False:
-                    print(f'{'\033[93m'}{typed}{'\033[0m'}', end=' ') # Retorna amarelo
+        for check in letters_check:
+            if check == letter: quantity_check += 1
+
+        if quantity_total - quantity_check != 0 and str(index) not in indexStr:
+            addDict(index, 'yellow')
+            letters_check.append(letter)
+        elif str(index) not in indexStr:
+            addDict(index, 'grey')
+
+    def checkLetters():
+        # Verificar verdes e letras únicas
+        for indexTyped, letterTyped in enumerate(wordTyped):
+            if letterTyped in randomWord:
+                quantity_letters = lettersCounter(letterTyped)
+                if quantity_letters == 1:
+                    if letterTyped not in letters_check:
+                        result = green_check(indexTyped, letterTyped)
+                        if result == False:
+                            addDict(indexTyped, 'grey')
+                    else:
+                        addDict(indexTyped, 'grey')
                 else:
-                    win += 1
-                    print(f'{"\033[32m"}{typed}{'\033[0m'}', end=' ') # Retorna verde
+                    green_check(indexTyped, letterTyped)
             else:
-                print(f'{'\033[90m'}{typed}{'\033[0m'}', end=' ')
-        else:
-            print(f'{'\033[90m'}{typed}{'\033[0m'}', end=' ') # Retorna cinza
+                addDict(indexTyped, 'grey')
+        
+        # Verificar amarelos
+        for indexTyped, letterTyped in enumerate(wordTyped):
+            if letterTyped in randomWord:
+                yellow_check(indexTyped, letterTyped)
+                
+    checkLetters()
+    print(dictLetter)
+    win = 0
+
+    for value_dict in dictLetter.values():
+        if value_dict == 'green': win += 1
 
     if win == 5:
         return 'Win'
