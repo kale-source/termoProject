@@ -24,8 +24,8 @@ def gameLogic(randomWord, wordTyped):
     letters_check = list()
     indexList = []
 
+    # Identifica os verdes
     def green_check(index, letter):
-        # Identifica os verdes
         for indexRandom, letterRandom in enumerate(randomWord):
             if indexRandom == index and letterRandom == letter:
                 addDict(index, 'green')
@@ -35,8 +35,8 @@ def gameLogic(randomWord, wordTyped):
             
         return False
     
+    # Identifica os amarelos depois dos verdes
     def yellow_check(index, letter):
-        # Identifica os amarelos depois dos verdes
         quantity_total = lettersCounter(letter)
         quantity_check = 0
         indexStr = ''
@@ -76,8 +76,8 @@ def gameLogic(randomWord, wordTyped):
                 
     checkLetters()
     print(dictLetter)
-    win = 0
 
+    win = 0
     for value_dict in dictLetter.values():
         if value_dict == 'green': win += 1
 
@@ -85,8 +85,3 @@ def gameLogic(randomWord, wordTyped):
         return 'Win'
     else:
         return 'Lose'
-    
-    # False = Amarelo
-    # True = Verde
-    # None = Cinza
-    
