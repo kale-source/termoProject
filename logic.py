@@ -23,7 +23,7 @@ def gameLogic(randomWord, wordTyped):
         return letters_quantity
     
     letters_check = list()
-    indexList = []
+    indexList = list()
 
     # Função para identifica os verdes antes dos amarelos
     def green_check(index, letter):
