@@ -134,9 +134,3 @@ Desenvolvido por **Kaiky Leandro**
 
 Projeto criado como desafio pessoal para fortalecimento da lógica de programação.
 Sem uso de Inteligência Artificial durante o desenvolvimento da solução.
-
----
-
-## 📄 Licença
-
-Este projeto ainda não possui licença definida.
